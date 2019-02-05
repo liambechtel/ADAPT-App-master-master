@@ -5,7 +5,6 @@
 //  Created by Timmy Gouin on 1/7/18.
 //  Copyright © 2018 Timmy Gouin. All rights reserved.
 //
-//TEST
 
 import UIKit
 import CoreBluetooth
