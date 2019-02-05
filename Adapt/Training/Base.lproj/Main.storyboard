@@ -1,29 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qkg-fN-Rxg">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qkg-fN-Rxg">
     <device id="ipad10_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="HelveticaNeueExtras.ttc">
-            <string>HelveticaNeue-CondensedBold</string>
-        </array>
-        <array key="NBA Bucks.otf">
-            <string>NBA-BucksRegular</string>
-        </array>
-        <array key="Proxima Nova Semibold.ttf">
-            <string>ProximaNova-Semibold</string>
-        </array>
-        <array key="Proxima Nova Thin.ttf">
-            <string>ProximaNovaT-Thin</string>
-        </array>
-    </customFonts>
     <scenes>
         <!--Calibration View Controller-->
         <scene sceneID="6ip-wn-aWS">
@@ -398,7 +382,7 @@
                 <viewControllerPlaceholder storyboardIdentifier="chooseDevices" storyboardName="BLE" referencedIdentifier="chooseDevices" id="1FA-cc-xC5" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NMI-7K-HEA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="836" y="206"/>
+            <point key="canvasLocation" x="354" y="153"/>
         </scene>
         <!--Review Training View Controller-->
         <scene sceneID="aAL-pC-vu8">
@@ -567,7 +551,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aeO-5t-LID">
-                                            <rect key="frame" x="396" y="12" width="42" height="21"/>
+                                            <rect key="frame" x="396" y="11.5" width="42" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -595,7 +579,7 @@
             <objects>
                 <navigationController id="J5Q-Jv-NgW" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="7LC-aS-pgf">
-                        <rect key="frame" x="0.0" y="20" width="834" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="834" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -615,7 +599,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Training Setup" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LC4-Sr-Lf8">
-                                <rect key="frame" x="248" y="99" width="338" height="60"/>
+                                <rect key="frame" x="248" y="105" width="338" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="Bzs-V8-Pcv"/>
                                     <constraint firstAttribute="width" constant="338" id="Y2O-tA-eWr"/>
@@ -625,10 +609,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dOA-ll-w00" customClass="TrainingSetupCell" customModule="Adapt" customModuleProvider="target">
-                                <rect key="frame" x="92" y="294" width="650" height="75"/>
+                                <rect key="frame" x="92" y="300" width="650" height="75"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Base Type" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TbX-3a-9pc">
-                                        <rect key="frame" x="40" y="17" width="118" height="40"/>
+                                        <rect key="frame" x="40" y="17.5" width="118" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="I2o-YP-qxq"/>
                                         </constraints>
@@ -637,7 +621,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h3T-uA-QI8">
-                                        <rect key="frame" x="540" y="7" width="100" height="60"/>
+                                        <rect key="frame" x="540" y="7.5" width="100" height="60"/>
                                         <color key="backgroundColor" white="1" alpha="0.29895119863013697" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="Qiz-9I-sr5"/>
@@ -673,10 +657,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="06P-NP-kLR" customClass="TrainingSetupCell" customModule="Adapt" customModuleProvider="target">
-                                <rect key="frame" x="92" y="399" width="650" height="75"/>
+                                <rect key="frame" x="92" y="405" width="650" height="75"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Training Type" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eeY-j4-1QZ">
-                                        <rect key="frame" x="40" y="17" width="156.5" height="40"/>
+                                        <rect key="frame" x="40" y="17.5" width="156.5" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="yU8-sr-0tr"/>
                                         </constraints>
@@ -685,7 +669,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g1d-Aa-TEe">
-                                        <rect key="frame" x="540" y="7" width="100" height="60"/>
+                                        <rect key="frame" x="540" y="7.5" width="100" height="60"/>
                                         <color key="backgroundColor" white="1" alpha="0.30082408199999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="100" id="6qx-g5-vRy"/>
@@ -721,10 +705,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V6A-9h-8jV" customClass="TrainingSetupCell" customModule="Adapt" customModuleProvider="target">
-                                <rect key="frame" x="92" y="504" width="650" height="75"/>
+                                <rect key="frame" x="92" y="510" width="650" height="75"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Left / right leg" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="avj-n5-l8A">
-                                        <rect key="frame" x="40" y="17" width="198" height="40"/>
+                                        <rect key="frame" x="40" y="17.5" width="198" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="SEm-sq-wSF"/>
                                         </constraints>
@@ -733,7 +717,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tES-a3-geQ">
-                                        <rect key="frame" x="540" y="7" width="100" height="60"/>
+                                        <rect key="frame" x="540" y="7.5" width="100" height="60"/>
                                         <color key="backgroundColor" white="1" alpha="0.30082408201917804" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="Evv-9s-p5r"/>
@@ -769,10 +753,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n00-Qp-gNQ" customClass="TrainingSetupCell" customModule="Adapt" customModuleProvider="target">
-                                <rect key="frame" x="92" y="609" width="650" height="75"/>
+                                <rect key="frame" x="92" y="615" width="650" height="75"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2pa-v1-FNB">
-                                        <rect key="frame" x="40" y="17" width="52.5" height="40"/>
+                                        <rect key="frame" x="40" y="17.5" width="52.5" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="EXa-6s-Ngw"/>
                                         </constraints>
@@ -800,10 +784,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iNG-HG-mvO" customClass="TrainingSetupCell" customModule="Adapt" customModuleProvider="target">
-                                <rect key="frame" x="92" y="714" width="650" height="75"/>
+                                <rect key="frame" x="92" y="720" width="650" height="75"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Duration" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xyd-zv-9CL">
-                                        <rect key="frame" x="40" y="17" width="98" height="40"/>
+                                        <rect key="frame" x="40" y="17.5" width="98" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="1LK-gG-6la"/>
                                         </constraints>
@@ -812,7 +796,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n7i-y8-VqZ">
-                                        <rect key="frame" x="540" y="7" width="100" height="60"/>
+                                        <rect key="frame" x="540" y="7.5" width="100" height="60"/>
                                         <color key="backgroundColor" white="1" alpha="0.29948632516986295" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="PNr-c7-018"/>
@@ -869,7 +853,7 @@
                                 </constraints>
                             </pickerView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6wH-J0-aI8" customClass="TrainingSetupCell" customModule="Adapt" customModuleProvider="target">
-                                <rect key="frame" x="92" y="189" width="650" height="75"/>
+                                <rect key="frame" x="92" y="195" width="650" height="75"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Test Or Training" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RG1-bF-SxM">
                                         <rect key="frame" x="40" y="17.5" width="197.5" height="40"/>
@@ -970,7 +954,7 @@
         <image name="down-arrow.jpg" width="600" height="600"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="QTh-k9-KIK"/>
+        <segue reference="LUm-kd-Y0g"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
 </document>

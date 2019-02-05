@@ -5,11 +5,13 @@
 //  Created by Timmy Gouin on 12/13/17.
 //  Copyright © 2017 Timmy Gouin. All rights reserved.
 //
-//test3
+
 import Foundation
 import UIKit
 import CoreBluetooth
 import CoreData
+
+var calibrate_flag = 0
 
 extension Data {
     func hexEncodedString() -> String {
@@ -152,11 +154,18 @@ class BLEController: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
                 let eulerbinbyte = Data(bytes: eulerbin)
                 let eulerasciibyte = Data(bytes: eulerascii)
                 let setheaderbyte = Data(bytes:setheader)
+                let cali:[UInt8] = [0xf7,0x60,0x60]
+                let calibyte = Data(bytes: cali)
                 
 //                peripheral.writeValue(setstreambyte, for: characteristic, type: CBCharacteristicWriteType.withoutResponse)
 //                peripheral.writeValue(eulerbinbyte, for: characteristic,type: CBCharacteristicWriteType.withoutResponse)
                 peripheral.writeValue(setheaderbyte, for: characteristic,type: CBCharacteristicWriteType.withoutResponse)
                 peripheral.writeValue(startbinbyte, for: characteristic,type: CBCharacteristicWriteType.withoutResponse)
+                
+                if (calibrate_flag == 1){
+                    peripheral.writeValue(calibyte, for: characteristic,type: CBCharacteristicWriteType.withoutResponse)
+                    calibrate_flag = 0
+                }
                 //               peripheral.writeValue(setbaudbyte, for: characteristic, type: CBCharacteristicWriteType.withoutResponse)
 //                peripheral.writeValue(setdelaybyte, for: characteristic, type: CBCharacteristicWriteType.withoutResponse)
                 //  peripheral.writeValue(savemodebyte, for: characteristic, type: CBCharacteristicWriteType.withoutResponse)
@@ -177,7 +186,7 @@ class BLEController: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         
-        if var value = characteristic.value {
+        if let value = characteristic.value {
             //let data = NSMutableData(data: value)
             //data_packet.appendData(data)
             data_string=Data()

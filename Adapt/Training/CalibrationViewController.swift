@@ -27,6 +27,7 @@ class CalibrationViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var calibrateImage: UIImageView!
     
     @IBAction func calibrateButtonFunc(_ sender: UIButton) {
+        calibrate_flag = 1
         tareOffsetX = -CGFloat(lastEuler.roll) * CalibrationViewController.EULER_SCALAR
         tareOffsetY = -CGFloat(lastEuler.pitch) * CalibrationViewController.EULER_SCALAR
         

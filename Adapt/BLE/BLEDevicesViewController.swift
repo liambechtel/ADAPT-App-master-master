@@ -27,7 +27,7 @@ class BLEDevicesViewController: UIViewController, UITableViewDelegate, UITableVi
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
 
         
-        if let peripheral = appDelegate.bleController.sensorTile {
+        if var peripheral = appDelegate.bleController.sensorTile {
             appDelegate.bleController.centralManager.cancelPeripheralConnection(peripheral)
         }
         BLEController.shouldAutoconnect = false
