@@ -20,6 +20,7 @@ class ExportToCSV{
             csvText.append("Bias X Angle,Bias Y Angle,Score\n")
             csvText.append("\(biasPoint.x),\(biasPoint.y),\(training.score)\n")
         }
+        
         if let notes = training.notes {
             csvText.append("Trainer Notes\n")
             csvText.append("\(training.notes!)\n")
