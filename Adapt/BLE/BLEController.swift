@@ -139,7 +139,7 @@ class BLEController: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
                 let startbin:[UInt8] = [0xf9, 0x55, 0x55];
                 let setstreambin:[UInt8] = [0xf7, 0x50, 0x01, 0x51];
                 let setdelaybin:[UInt8] = [0xf7, 0x52, 0x7a, 0x51];
-                let eulerbin:[UInt8] = [0xf9,0x01,0x01]
+                let eulerbin:[UInt8] = [0xf7,0x01,0x01]
                 let eulerascii:[UInt8] = [0x3a,0x31,0x5c,0x6e]
                 let setheader:[UInt8] = [0xf7,0xdd,0x00,0x00,0x00,0x50,0x2d]
                 
@@ -160,6 +160,7 @@ class BLEController: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
 //                peripheral.writeValue(setstreambyte, for: characteristic, type: CBCharacteristicWriteType.withoutResponse)
 //                peripheral.writeValue(eulerbinbyte, for: characteristic,type: CBCharacteristicWriteType.withoutResponse)
                 peripheral.writeValue(setheaderbyte, for: characteristic,type: CBCharacteristicWriteType.withoutResponse)
+                //peripheral.writeValue(eulerbinbyte, for: characteristic,type: CBCharacteristicWriteType.withoutResponse)
                 peripheral.writeValue(startbinbyte, for: characteristic,type: CBCharacteristicWriteType.withoutResponse)
                 
                 if (calibrate_flag == 1){
@@ -228,6 +229,15 @@ class BLEController: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
                 dyaw = (Double)(yaw*180/3.14159265)//convert radians to degrees
                 droll = (Double)(roll*180/3.14159265)
                 dpitch = (Double)(pitch*180/3.14159265)
+//                if (dyaw < 0){
+//                    dyaw = dyaw+360
+//                }
+//                if (droll < 0){
+//                    droll = droll+360
+//                }
+//                if (dpitch < 0){
+//                    dpitch = dpitch+360
+//                }
                 let euler = Euler(yaw: dyaw, pitch: dpitch, roll: droll)
                 //
                 //                //print("Euler Angles: yaw: \(euler.yaw) pitch: \(euler.pitch) roll: \(euler.roll)")

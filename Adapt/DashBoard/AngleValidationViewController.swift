@@ -48,6 +48,7 @@ class AngleValidationViewController: UIViewController, CLLocationManagerDelegate
         case 1:
             self.tareOffsetX = -CGFloat(lastEuler.roll) * CalibrationViewController.EULER_SCALAR
             self.tareOffsetY = -CGFloat(lastEuler.pitch) * CalibrationViewController.EULER_SCALAR
+            calibrate_flag = 1
             
             self.instructionLabel.text = "2. Secure the Medium Base to the bottom of the board "
             self.buttonLabel.setTitle("Done", for: .normal)
