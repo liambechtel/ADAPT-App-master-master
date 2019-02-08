@@ -87,8 +87,8 @@ class BLEController: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         if let name = peripheral.name {
             print("NAME:")
             print("\(name)")
-            if name == "YostLabsMBLE" {
-                //                      if name == "AM1V340" {
+//            if name == "YostLabsMBLE" {
+              if name == "SLAVE"{
                 sensorTile = peripheral
                 guard let unwrappedPeripheral = sensorTile else { return }
                 unwrappedPeripheral.delegate = self
@@ -128,56 +128,37 @@ class BLEController: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
                 guard sensorTile != nil else { return }
                 peripheral.setNotifyValue(true, for: characteristic)
                 
-                
-                let setstream:[UInt8] = [0x3a ,0x38, 0x30, 0x2c, 0x31 ,0x2c ,0x32, 0x35, 0x35, 0x2c, 0x32, 0x35 ,0x35 ,0x2c, 0x32, 0x35 ,0x35 ,0x2c ,0x32 ,0x35, 0x35 ,0x2c, 0x32, 0x35, 0x35 ,0x2c, 0x32 ,0x35, 0x35, 0x2c, 0x32, 0x35 ,0x35, 0x5c, 0x6e];
-                let setbaud:[UInt8] = [0x3a, 0x32, 0x33, 0x31, 0x2c, 0x39, 0x36 ,0x30, 0x30, 0x5c, 0x6e];
-                let setdelay:[UInt8] = [0x3a, 0x38, 0x32, 0x2c ,0x35 ,0x30, 0x30, 0x30 ,0x30,0x30,0x2c ,0x32, 0x32, 0x35, 0x32, 0x32, 0x35, 0x32, 0x32, 0x35, 0x32, 0x32, 0x35, 0x2c, 0x31, 0x30 ,0x30, 0x30 ,0x5c, 0x6e];
-                let savemode:[UInt8] = [0x3a, 0x32, 0x32, 0x35 ,0x5c ,0x6e];
-                let softreset:[UInt8] = [0x3a, 0x32 ,0x32, 0x36, 0x5c, 0x6e];
-                let startData:[UInt8] = [0x3a, 0x38, 0x35, 0x5c, 0x6e];
-                let startTimeLengthData:[UInt8] = [0x3a, 0x38, 0x35, 0x5c, 0x6e];
-                let startbin:[UInt8] = [0xf9, 0x55, 0x55];
-                let setstreambin:[UInt8] = [0xf7, 0x50, 0x01, 0x51];
-                let setdelaybin:[UInt8] = [0xf7, 0x52, 0x7a, 0x51];
-                let eulerbin:[UInt8] = [0xf7,0x01,0x01]
-                let eulerascii:[UInt8] = [0x3a,0x31,0x5c,0x6e]
-                let setheader:[UInt8] = [0xf7,0xdd,0x00,0x00,0x00,0x50,0x2d]
-                
+                let setstream:[UInt8] = [0x3a, 0x38, 0x30, 0x2c, 0x31, 0x2c, 0x31, 0x2c, 0x32, 0x35, 0x35, 0x2c, 0x32, 0x35, 0x35, 0x2c, 0x32, 0x35, 0x35, 0x2c, 0x32, 0x35, 0x35, 0x2c, 0x32, 0x35, 0x35, 0x5c, 0x6e]
                 let setstreambyte = Data(bytes: setstream)
-                let setbaudbyte = Data(bytes: setbaud)
-                let setdelaybyte = Data(bytes: setdelay)
-                let savemodebyte = Data(bytes: savemode)
-                let resetbyte = Data(bytes: softreset)
-                let startDatabyte = Data(bytes: startData)
+                
+                let startbin:[UInt8] = [0xf9, 0x55, 0x55];
                 let startbinbyte = Data(bytes: startbin)
-                let startstreambin = Data(bytes: setstreambin)
-                let eulerbinbyte = Data(bytes: eulerbin)
-                let eulerasciibyte = Data(bytes: eulerascii)
+                
+                let setheader:[UInt8] = [0xf7,0xdd,0x00,0x00,0x00,0x50,0x2d]
                 let setheaderbyte = Data(bytes:setheader)
+                
                 let cali:[UInt8] = [0xf7,0x60,0x60]
                 let calibyte = Data(bytes: cali)
                 
-//                peripheral.writeValue(setstreambyte, for: characteristic, type: CBCharacteristicWriteType.withoutResponse)
-//                peripheral.writeValue(eulerbinbyte, for: characteristic,type: CBCharacteristicWriteType.withoutResponse)
+                
+                peripheral.writeValue(setstreambyte, for: characteristic,type: CBCharacteristicWriteType.withoutResponse)
+                
                 peripheral.writeValue(setheaderbyte, for: characteristic,type: CBCharacteristicWriteType.withoutResponse)
-                //peripheral.writeValue(eulerbinbyte, for: characteristic,type: CBCharacteristicWriteType.withoutResponse)
+
                 peripheral.writeValue(startbinbyte, for: characteristic,type: CBCharacteristicWriteType.withoutResponse)
                 
                 if (calibrate_flag == 1){
                     peripheral.writeValue(calibyte, for: characteristic,type: CBCharacteristicWriteType.withoutResponse)
                     calibrate_flag = 0
                 }
-                //               peripheral.writeValue(setbaudbyte, for: characteristic, type: CBCharacteristicWriteType.withoutResponse)
-//                peripheral.writeValue(setdelaybyte, for: characteristic, type: CBCharacteristicWriteType.withoutResponse)
-                //  peripheral.writeValue(savemodebyte, for: characteristic, type: CBCharacteristicWriteType.withoutResponse)
-                //                peripheral.writeValue(resetbyte, for: characteristic, type: CBCharacteristicWriteType.withoutResponse)
-                
-                
-//                peripheral.writeValue(startbinbyte, for: characteristic, type: CBCharacteristicWriteType.withoutResponse)
+
                 
                 print(peripheral)
                 print(characteristic)
                 print(service)
+                
+                peripheral.setNotifyValue(true, for: characteristic)
+                
                 return
             }
         }
@@ -205,6 +186,9 @@ class BLEController: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
             let packet_size = data_string.count
             let data = NSMutableData(data: data_string);
             data_string=Data()
+            
+            print(data)
+            
             while(counter < (packet_size - 15)){//check if enough data present in packet
                 while((raw != 0x0cfe)&&(counter < (packet_size - 15))){//check header
                     data.getBytes(&raw, range: NSMakeRange(counter,2))
@@ -229,6 +213,10 @@ class BLEController: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
                 dyaw = (Double)(yaw*180/3.14159265)//convert radians to degrees
                 droll = (Double)(roll*180/3.14159265)
                 dpitch = (Double)(pitch*180/3.14159265)
+                
+//                print("Euler Angles: yaw: \(dyaw) pitch: \(droll) roll: \(dpitch)")
+
+                
 //                if (dyaw < 0){
 //                    dyaw = dyaw+360
 //                }
@@ -238,9 +226,11 @@ class BLEController: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
 //                if (dpitch < 0){
 //                    dpitch = dpitch+360
 //                }
+                
                 let euler = Euler(yaw: dyaw, pitch: dpitch, roll: droll)
-                //
-                //                //print("Euler Angles: yaw: \(euler.yaw) pitch: \(euler.pitch) roll: \(euler.roll)")
+                
+//                print("Euler Angles: yaw: \(euler.yaw) pitch: \(euler.pitch) roll: \(euler.roll)")
+                
                 let nc = NotificationCenter.default
                 ////                nc.post(name:Notification.Name(rawValue:"DeviceDataCHEST"), object: eulerCHEST)
                 nc.post(name:Notification.Name(rawValue:"DeviceData"), object: euler)
