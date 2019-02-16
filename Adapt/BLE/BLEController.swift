@@ -141,7 +141,7 @@ class BLEController: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
                 let calibyte = Data(bytes: cali)
                 
                 
-                peripheral.writeValue(setstreambyte, for: characteristic,type: CBCharacteristicWriteType.withoutResponse)
+                //peripheral.writeValue(setstreambyte, for: characteristic,type: CBCharacteristicWriteType.withoutResponse)
                 
                 peripheral.writeValue(setheaderbyte, for: characteristic,type: CBCharacteristicWriteType.withoutResponse)
 
@@ -173,10 +173,14 @@ class BLEController: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
             //data_packet.appendData(data)
             data_string=Data()
             data_string.append(value)
+            let sensor_1_header:UInt32=0xFE;
+            let sensor_2_header:UInt32=0xFF;
             var raw:UInt32=0
+            var sensor_id:UInt32=0
             var hex_string=""
             var timestamp:Float=0;
-            var counter:Int=0
+            var counter:Int=0;
+            var packages_caught:UInt8=0;
             var yaw:Float=0;
             var pitch:Float=0;
             var roll:Float=0;
@@ -187,29 +191,36 @@ class BLEController: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
             let data = NSMutableData(data: data_string);
             data_string=Data()
             
-            print(data)
-            
-            while(counter < (packet_size - 15)){//check if enough data present in packet
-                while((raw != 0x0cfe)&&(counter < (packet_size - 15))){//check header
-                    data.getBytes(&raw, range: NSMakeRange(counter,2))
+            print("data from teensy/yost = ", data)
+            while(counter < (packet_size - 12)){//check if enough data present in packet
+                repeat{//check header
+                    data.getBytes(&raw, range: NSMakeRange(counter,1))
                     counter+=1
-                }
-                if(counter>=(packet_size - 15)){//break if enough data not present
+                    sensor_id=raw
+                }while((raw != sensor_1_header)&&(raw != sensor_2_header)&&(counter < (packet_size - 12)))//
+                if(counter > (packet_size - 12))
+                {
                     break
                 }
-                counter+=1
+                packages_caught+=1
                 data.getBytes(&raw, range: NSMakeRange(counter,4))
                 raw=Endian_change(org:raw)
                 hex_string=String(format:"%02X",raw)
+                print("pitch raw = ", hex_string)
                 pitch = hextoFloat(data_string:hex_string)
-                data.getBytes(&raw, range: NSMakeRange(counter+4,4))
+                counter+=4
+                data.getBytes(&raw, range: NSMakeRange(counter,4))
                 raw=Endian_change(org:raw)
                 hex_string=String(format:"%02X",raw)
+                print("yaw raw = ", hex_string)
                 yaw = hextoFloat(data_string:hex_string)
-                data.getBytes(&raw, range: NSMakeRange(counter+8,4))
+                counter+=4
+                data.getBytes(&raw, range: NSMakeRange(counter,4))
                 raw=Endian_change(org:raw)
                 hex_string=String(format:"%02X",raw)
+                print("roll raw = ", hex_string)
                 roll = hextoFloat(data_string:hex_string)//string to float
+                counter+=4
                 dyaw = (Double)(yaw*180/3.14159265)//convert radians to degrees
                 droll = (Double)(roll*180/3.14159265)
                 dpitch = (Double)(pitch*180/3.14159265)
@@ -227,14 +238,24 @@ class BLEController: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
 //                    dpitch = dpitch+360
 //                }
                 
-                let euler = Euler(yaw: dyaw, pitch: dpitch, roll: droll)
-                
+                let euler = Euler(yaw: dyaw, pitch: dpitch, roll: droll);
 //                print("Euler Angles: yaw: \(euler.yaw) pitch: \(euler.pitch) roll: \(euler.roll)")
                 
                 let nc = NotificationCenter.default
                 ////                nc.post(name:Notification.Name(rawValue:"DeviceDataCHEST"), object: eulerCHEST)
-                nc.post(name:Notification.Name(rawValue:"DeviceData"), object: euler)
+                print("sensor_id=",sensor_id)
+                if(sensor_id==sensor_1_header)
+                {
+                    print("Sensor 1")
+                    nc.post(name:Notification.Name(rawValue:"DeviceData"), object: euler)
+                }
+                else if(sensor_id==sensor_2_header)
+                {
+                    print("Sensor 2")
+                    nc.post(name:Notification.Name(rawValue:"DeviceData2"), object: euler)
+                }
             }
+            print("packages caught = ",packages_caught)
         }
     }
 

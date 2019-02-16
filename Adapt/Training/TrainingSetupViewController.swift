@@ -33,6 +33,8 @@ class TrainingSetupViewController: UIViewController, UIPopoverPresentationContro
     var legType: LegType?
     var assessmentType: AssessmentType?
     let date = Date()
+    let default_raw: Int16 = 1
+    var text: String?
     var duration: Int32?
     
     @IBOutlet weak var pickerView: UIPickerView!

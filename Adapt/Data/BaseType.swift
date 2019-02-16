@@ -25,7 +25,6 @@ enum BaseType: Int {
         case BaseType.Measurement:
             return "Measurement"
         }
-        return ""
     }
     
     static func count() -> Int {

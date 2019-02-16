@@ -61,7 +61,6 @@ class TrainingSetupPopoverViewController: UITableViewController{
         
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
         storyBoard.instantiateViewController(withIdentifier: "trainingSetup") as! TrainingSetupViewController
-
         switch(optionType) {
         case .Base:
             delegate?.saveBaseType(baseType: BaseType(rawValue: indexPath.row)!)
