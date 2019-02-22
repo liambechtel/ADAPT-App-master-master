@@ -37,7 +37,7 @@ class CalibrationViewController: UIViewController, CLLocationManagerDelegate {
         tareOffsetX = -CGFloat(lastEuler.roll) * CalibrationViewController.EULER_SCALAR
         tareOffsetY = -CGFloat(lastEuler.pitch) * CalibrationViewController.EULER_SCALAR
         
-       if (!hasReceivedData) {
+        if (!hasReceivedData) {
             let noDeviceAlert = UIAlertController(title: "Not Connected", message: "Please turn on the device and make sure Bluetooth is enabled", preferredStyle: UIAlertControllerStyle.alert)
             noDeviceAlert.addAction(UIAlertAction(title: "Done", style: UIAlertActionStyle.default, handler: { (alertAction) in
                 noDeviceAlert.dismiss(animated: true, completion: nil)
@@ -75,7 +75,7 @@ class CalibrationViewController: UIViewController, CLLocationManagerDelegate {
         }
         
         
-
+        
         
         //performSegue(withIdentifier: "startTraining", sender: nil)
         
@@ -99,10 +99,10 @@ class CalibrationViewController: UIViewController, CLLocationManagerDelegate {
         let nc = NotificationCenter.default
         nc.addObserver(forName:Notification.Name(rawValue:"SavedDeviceConnecting"),
                        object:nil, queue:nil) { notification in
-            self.sensorAnglesLabel.text = "Device found, connecting..."
+                        self.sensorAnglesLabel.text = "Device found, connecting..."
         }
         
-        nc.addObserver(forName:Notification.Name(rawValue:"DeviceData"),
+        nc.addObserver(forName:Notification.Name(rawValue:"Sensor_1"),
                        object:nil, queue:nil) { notification in
                         //guard let quaternion = notification.object as? Quaternion else { return }
                         guard let euler = notification.object as? Euler else { return }
@@ -118,9 +118,9 @@ class CalibrationViewController: UIViewController, CLLocationManagerDelegate {
                         self.view.layoutIfNeeded()
         }
         
-        nc.addObserver(forName:Notification.Name(rawValue:"DeviceData2"),
-                                       object:nil, queue:nil) { notification in
-                                        //guard let quaternion = notification.object as? Quaternion else { return }
+        nc.addObserver(forName:Notification.Name(rawValue:"Sensor_2"),
+                       object:nil, queue:nil) { notification in
+                        //guard let quaternion = notification.object as? Quaternion else { return }
                         guard let euler = notification.object as? Euler else { return }
                         self.hasReceivedData = true
                         self.lastEuler = euler

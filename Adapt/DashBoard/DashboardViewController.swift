@@ -80,7 +80,6 @@ class DashboardViewController: UIViewController {
         self.navigationController?.navigationBar.barTintColor = Colors.goodLandGreen
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
-        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

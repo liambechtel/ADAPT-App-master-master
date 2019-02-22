@@ -8,6 +8,17 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="NBA Bucks.otf">
+            <string>NBA-BucksRegular</string>
+        </array>
+        <array key="Proxima Nova Semibold.ttf">
+            <string>ProximaNova-Semibold</string>
+        </array>
+        <array key="Proxima Nova Thin.ttf">
+            <string>ProximaNovaT-Thin</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Calibration View Controller-->
         <scene sceneID="6ip-wn-aWS">
@@ -177,6 +188,13 @@
                                 <constraints>
                                     <constraint firstAttribute="width" constant="10" id="ZYy-pi-m3s"/>
                                     <constraint firstAttribute="height" constant="10" id="oQB-yX-I43"/>
+                                </constraints>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VAj-ts-czM">
+                                <rect key="frame" x="412" y="551" width="10" height="10"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="10" id="aos-pj-IEv"/>
+                                    <constraint firstAttribute="width" constant="10" id="r91-nN-Uad"/>
                                 </constraints>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eOU-XE-0An">
@@ -954,7 +972,7 @@
         <image name="down-arrow.jpg" width="600" height="600"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="LUm-kd-Y0g"/>
+        <segue reference="QTh-k9-KIK"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
 </document>
