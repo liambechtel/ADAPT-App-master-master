@@ -13,8 +13,10 @@ import CoreBluetooth
 
 var rollString1:String=""
 var rollString2:String=""
+var rollString3:String=""
 var pitchString1:String=""
 var pitchString2:String=""
+var pitchString3:String=""
 
 
 class CalibrationViewController: UIViewController, CLLocationManagerDelegate {
@@ -112,7 +114,7 @@ class CalibrationViewController: UIViewController, CLLocationManagerDelegate {
                         let newY = -CGFloat(euler.pitch) * MainViewController.EULER_SCALAR
                         rollString1 = String(format: "%.1f", newX / MainViewController.EULER_SCALAR)
                         pitchString1 = String(format: "%.1f", newY / MainViewController.EULER_SCALAR)
-                        self.sensorAnglesLabel.text = "Sensor Data\nX1: \(rollString1)°  Y1: \(pitchString1)°\nX2: \(rollString2)°  Y2: \(pitchString2)°"
+                        self.sensorAnglesLabel.text = "X1: \(rollString1)°  Y1: \(pitchString1)°\nX2: \(rollString2)°  Y2: \(pitchString2)°\nX3: \(rollString3)°  Y3: \(pitchString3)°"
                         //self.lastRoll = -(CGFloat(euler.yaw) * .pi / 160) + self.lastHeading - (.pi/8)
                         //self.setRollPointPosition(angle: self.lastRoll)
                         self.view.layoutIfNeeded()
@@ -128,7 +130,23 @@ class CalibrationViewController: UIViewController, CLLocationManagerDelegate {
                         let newY = -CGFloat(euler.pitch) * MainViewController.EULER_SCALAR
                         rollString2 = String(format: "%.1f", newX / MainViewController.EULER_SCALAR)
                         pitchString2 = String(format: "%.1f", newY / MainViewController.EULER_SCALAR)
-                        self.sensorAnglesLabel.text = "Sensor Data\nX1: \(rollString1)°  Y1: \(pitchString1)°\nX2: \(rollString2)°  Y2: \(pitchString2)°"
+                        self.sensorAnglesLabel.text = "X1: \(rollString1)°  Y1: \(pitchString1)°\nX2: \(rollString2)°  Y2: \(pitchString2)°\nX3: \(rollString3)°  Y3: \(pitchString3)°"
+                        //self.lastRoll = -(CGFloat(euler.yaw) * .pi / 160) + self.lastHeading - (.pi/8)
+                        //self.setRollPointPosition(angle: self.lastRoll)
+                        self.view.layoutIfNeeded()
+        }
+        
+        nc.addObserver(forName:Notification.Name(rawValue:"Sensor_3"),
+                       object:nil, queue:nil) { notification in
+                        //guard let quaternion = notification.object as? Quaternion else { return }
+                        guard let euler = notification.object as? Euler else { return }
+                        self.hasReceivedData = true
+                        self.lastEuler = euler
+                        let newX = -CGFloat(euler.roll) * MainViewController.EULER_SCALAR
+                        let newY = -CGFloat(euler.pitch) * MainViewController.EULER_SCALAR
+                        rollString3 = String(format: "%.1f", newX / MainViewController.EULER_SCALAR)
+                        pitchString3 = String(format: "%.1f", newY / MainViewController.EULER_SCALAR)
+                        self.sensorAnglesLabel.text = "X1: \(rollString1)°  Y1: \(pitchString1)°\nX2: \(rollString2)°  Y2: \(pitchString2)°\nX3: \(rollString3)°  Y3: \(pitchString3)°"
                         //self.lastRoll = -(CGFloat(euler.yaw) * .pi / 160) + self.lastHeading - (.pi/8)
                         //self.setRollPointPosition(angle: self.lastRoll)
                         self.view.layoutIfNeeded()

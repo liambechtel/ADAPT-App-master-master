@@ -83,7 +83,7 @@ class BLEController: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
                 nc.post(name:Notification.Name(rawValue:"SavedDeviceConnecting"), object: nil)
             }
         }
-               // nc.post(name:Notification.Name(rawValue:"DeviceFound"), object: peripheral)
+//        nc.post(name:Notification.Name(rawValue:"DeviceFound"), object: peripheral)
         if let name = peripheral.name {
             print("NAME:")
             print("\(name)")
@@ -93,7 +93,6 @@ class BLEController: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
                 guard let unwrappedPeripheral = sensorTile else { return }
                 unwrappedPeripheral.delegate = self
                 centralManager.connect(unwrappedPeripheral, options: nil)
-                
             }
         }
     }
@@ -173,8 +172,9 @@ class BLEController: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
             //data_packet.appendData(data)
             data_string=Data()
             data_string.append(value)
-            let sensor_1_header:UInt32=0xFE;
-            let sensor_2_header:UInt32=0xFF;
+            let sensor_1_header:UInt32=0xFF;
+            let sensor_2_header:UInt32=0xFE;
+            let sensor_3_header:UInt32=0xFD;
             var raw:UInt32=0
             var sensor_id:UInt32=0
             var hex_string=""
@@ -246,6 +246,11 @@ class BLEController: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
                     {
                         //print("Sensor 2")
                         nc.post(name:Notification.Name(rawValue:"Sensor_2"), object: euler)
+                    }
+                    else if(sensor_id==sensor_3_header)
+                    {
+                        //print("Sensor 3")
+                        nc.post(name:Notification.Name(rawValue:"Sensor_3"), object: euler)
                     }
                 }
             }

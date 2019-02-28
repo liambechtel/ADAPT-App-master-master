@@ -41,7 +41,6 @@ class BLEDevicesViewController: UIViewController, UITableViewDelegate, UITableVi
                         print(nc)
                         print(notification)
                         print(notification.object as? CBPeripheral)
-                     
                         if let peripheral = notification.object as? CBPeripheral {
                             if let name = peripheral.name {
                                 var found = false
@@ -49,14 +48,12 @@ class BLEDevicesViewController: UIViewController, UITableViewDelegate, UITableVi
                                     if periph.name == name {
                                         found = true
                                         print("device found")
-
                                         break
                                     }
                                 }
                                 if !found {
                                     self.peripherals.append(peripheral)
                                     self.tableView.reloadData()
-                                    
                                 }
                             }
                         }
