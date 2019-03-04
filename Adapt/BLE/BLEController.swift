@@ -190,9 +190,10 @@ class BLEController: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
             let data = NSMutableData(data: data_string);
             let packages_caught:UInt8 = UInt8(data_string.count) / packet_size
             let valid_packet=(UInt8(data_string.count) % packet_size)
-            //print("data from teensy/yost = ", data,"Valid packet =",valid_packet)
+            print("data from teensy/yost = ", data,"Valid packet =",valid_packet)
             if(valid_packet==0)
-            {
+            {//febb8003 70bf98fd 71c4c048 abf7
+             //febb746c 8bbf98fd fdd0c048 bab5ff
                 for _ in 0..<packages_caught{
                     data.getBytes(&sensor_id, range: NSMakeRange(counter,1))
                     counter+=1

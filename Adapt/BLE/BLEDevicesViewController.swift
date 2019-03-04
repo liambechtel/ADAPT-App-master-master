@@ -30,6 +30,9 @@ class BLEDevicesViewController: UIViewController, UITableViewDelegate, UITableVi
         if var peripheral = appDelegate.bleController.sensorTile {
             appDelegate.bleController.centralManager.cancelPeripheralConnection(peripheral)
         }
+        
+        
+        
         BLEController.shouldAutoconnect = false
         appDelegate.bleController.startScan()
         print("start scan")
