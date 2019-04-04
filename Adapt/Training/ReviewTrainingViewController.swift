@@ -45,10 +45,11 @@ class ReviewTrainingViewController: UIViewController, UITextViewDelegate{
             
             MainViewController.drawCircle(imageView: biasPointView)
             MainViewController.drawPoint(imageView: pointView)
-            if let biasPoint = training.biasPoint as? CGPoint {
-                let roundedX = Double(round(biasPoint.x * 10) / 10)
-                let roundedY = Double(round(biasPoint.y * 10) / 10)
-                biasPointLabel.text = "Bias Point X: \(roundedX) Y: \(roundedY)"
+            if let biasPoint = BiasPoint[0] as? CGPoint {
+                biasPointLabel.text = "Base X:\(round(BiasPoint[0].x)),Y:\(round(BiasPoint[0].y)) Chest X:\(round(BiasPoint[1].x)),Y:\(round(BiasPoint[1].y)) Chest Velocity X:\(round(BiasPoint[2].x)),Y:\(round(BiasPoint[2].y))"
+                pointViewX.constant = BiasPoint[0].x * MainViewController.EULER_SCALAR * 0.445714285714286
+                pointViewY.constant = -BiasPoint[0].y * MainViewController.EULER_SCALAR * 0.445714285714286
+                view.layoutIfNeeded()
                 pointViewX.constant = biasPoint.x * MainViewController.EULER_SCALAR * 0.445714285714286
                 pointViewY.constant = -biasPoint.y * MainViewController.EULER_SCALAR * 0.445714285714286
                 view.layoutIfNeeded()

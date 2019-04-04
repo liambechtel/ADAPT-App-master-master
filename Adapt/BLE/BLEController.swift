@@ -10,7 +10,8 @@ import Foundation
 import UIKit
 import CoreBluetooth
 import CoreData
-
+let sem_packet = DispatchSemaphore(value: 1)
+var training_started = false
 var calibrate_flag = 0
 
 extension Data {
@@ -186,17 +187,18 @@ class BLEController: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
             var droll:Double=0;
             var dpitch:Double=0;
             var dyaw:Double=0;
-            let packet_size:UInt8 = 13
+            let packet_size:UInt8 = 14
             let data = NSMutableData(data: data_string);
             let packages_caught:UInt8 = UInt8(data_string.count) / packet_size
             let valid_packet=(UInt8(data_string.count) % packet_size)
-            print("data from teensy/yost = ", data,"Valid packet =",valid_packet)
+            //print("data from teensy/yost = ", data,"Valid packet =",valid_packet)
             if(valid_packet==0)
             {//febb8003 70bf98fd 71c4c048 abf7
              //febb746c 8bbf98fd fdd0c048 bab5ff
                 for _ in 0..<packages_caught{
                     data.getBytes(&sensor_id, range: NSMakeRange(counter,1))
-                    counter+=1
+                    //print("Sensor ID = %d",sensor_id);
+                    counter+=2
                     data.getBytes(&raw, range: NSMakeRange(counter,4))
                     raw=Endian_change(org:raw)
                     hex_string=String(format:"%02X",raw)
@@ -238,20 +240,27 @@ class BLEController: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
                     let nc = NotificationCenter.default
                     ////                nc.post(name:Notification.Name(rawValue:"DeviceDataCHEST"), object: eulerCHEST)
                     //print("sensor_id=",sensor_id)
-                    if(sensor_id==sensor_1_header)
+                    if((dyaw < 360)&&(dyaw > -360)&&(droll < 360)&&(droll > -360)&&(dpitch < 360)&&(dpitch > -360))
                     {
-                        //print("Sensor 1")
-                        nc.post(name:Notification.Name(rawValue:"Sensor_1"), object: euler)
-                    }
-                    else if(sensor_id==sensor_2_header)
-                    {
-                        //print("Sensor 2")
-                        nc.post(name:Notification.Name(rawValue:"Sensor_2"), object: euler)
-                    }
-                    else if(sensor_id==sensor_3_header)
-                    {
-                        //print("Sensor 3")
-                        nc.post(name:Notification.Name(rawValue:"Sensor_3"), object: euler)
+                        if(training_started)
+                        {
+                            sem_packet.wait();
+                        }
+                        if(sensor_id==sensor_1_header)
+                        {
+                            //print("Sensor 1")
+                            nc.post(name:Notification.Name(rawValue:"Sensor_1"), object: euler)
+                        }
+                        else if(sensor_id==sensor_2_header)
+                        {
+                            //print("Sensor 2")
+                            nc.post(name:Notification.Name(rawValue:"Sensor_2"), object: euler)
+                        }
+                        else if(sensor_id==sensor_3_header)
+                        {
+                            //print("Sensor 3")
+                            nc.post(name:Notification.Name(rawValue:"Sensor_3"), object: euler)
+                        }
                     }
                 }
             }

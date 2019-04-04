@@ -255,7 +255,7 @@ class APIController: NSObject {
                     training.notes = notes
                 }
                 if let score = dict["score"] as? Float {
-                    training.score = score
+                    training.score = round(score)
                 }
                 if let trainingType = dict["trainingType"] as? Int16 {
                     training.trainingType = trainingType

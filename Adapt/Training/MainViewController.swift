@@ -10,6 +10,17 @@ import UIKit
 //import CoreLocation
 var trainingString1:String=""
 var trainingString2:String=""
+var data_base: [CGPoint] = []
+var data_chest: [CGPoint] = []
+var data_chest_velocity: [CGPoint] = []
+var base_time:[Double]=[]
+var chest_time:[Double]=[]
+var chest_velocity_time:[Double]=[]
+var initial_time:Double=0.0
+var BiasPoint:[CGPoint]=[CGPoint(x:0,y:0),CGPoint(x:0,y:0),CGPoint(x:0,y:0)]
+var penalty:[Double]=[0.0,0.0,0.0]
+let scalarK:[Double]=[1.5,1.0,0.5]
+var score:Double=100.0
 
 class MainViewController: UIViewController /*, CLLocationManagerDelegate */{
     @IBOutlet weak var bullseyeView: UIImageView!
@@ -34,7 +45,6 @@ class MainViewController: UIViewController /*, CLLocationManagerDelegate */{
     var lastHeading: CGFloat = 0
     var lastEuler = Euler(yaw: 0, pitch: 0, roll: 0)
     var currentTraining: Training?
-    var data: [CGPoint] = []
     
     var timer = Timer()
     var timerSeconds: Int32 = 0
@@ -46,9 +56,7 @@ class MainViewController: UIViewController /*, CLLocationManagerDelegate */{
     var countdownRunning = false
     @IBOutlet weak var countdownLabel: UILabel!
     
-    var totalSamples:[Int32] = [0,0];
-    var runningTotal:[CGPoint] = [CGPoint(x: 0, y: 0),CGPoint(x: 0, y: 0)];
-    var runningScore:[CGFloat] = [0,0];
+    var totalSamples:[Int32] = [0,0,0];
     @IBAction func tarePressed(_ sender: Any) {
         tareOffsetX = -CGFloat(lastEuler.roll) * MainViewController.EULER_SCALAR
         tareOffsetY = -CGFloat(lastEuler.pitch) * MainViewController.EULER_SCALAR
@@ -57,30 +65,46 @@ class MainViewController: UIViewController /*, CLLocationManagerDelegate */{
     @IBOutlet weak var debugSensorDataView: UITextView!
     //var locationManager:CLLocationManager = CLLocationManager()
     
-    func getScore(x: CGFloat, y: CGFloat, Sensor_ID: Int) -> CGFloat {
+    func ScoreUpdate(x: CGFloat, y: CGFloat, Sensor_ID: Int)
+    {
+        //print("Sensor \(Sensor_ID)");
         let magnitude = sqrt(x * x + y * y)
-        var score:CGFloat = 0
-        if (magnitude < 5) {
-            score = 1.0
-            // bullseye
-        } else if (magnitude < 10) {
-            score = 0.75
-        } else if (magnitude < 15) {
-            score = 0.5
-        } else if (magnitude < 20) {
-            score = 0.25
-        }
-        self.runningScore[Sensor_ID] += score
-        var currentScore = CGFloat(round(CGFloat(self.runningScore[Sensor_ID]) * 1000.0 / CGFloat(self.totalSamples[Sensor_ID]))/10.0)
-        if (currentScore > 100) {
-            currentScore = 100
-        }
-        return currentScore
+        penalty[Sensor_ID]=(penalty[Sensor_ID]*Double(totalSamples[Sensor_ID]-1)+(scalarK[Sensor_ID] * Double(magnitude)))/Double(totalSamples[Sensor_ID])
+        score = 100 - penalty[0]-penalty[1]-penalty[2]
+        self.debugSensorDataView.text = "Score:\(round(score))\nPenalty Base:\(round(penalty[0]))\nPenalty Chest:\(round(penalty[1]))\nPenalty Chest Velocity:\(round(penalty[2]))\n"
     }
     
-    func getAverage(Sensor_ID: Int) -> CGPoint {
-        return CGPoint(x: runningTotal[Sensor_ID].x / CGFloat(totalSamples[Sensor_ID]), y: runningTotal[Sensor_ID].y / CGFloat(totalSamples[Sensor_ID]))
+    func FindBiasPoint()
+    {
+        var sum:CGPoint=CGPoint(x:0,y:0)
+        for i in 0..<data_base.count
+        {
+            sum.x+=data_base[i].x
+            sum.y+=data_base[i].y
+        }
+        BiasPoint[0].x=sum.x/CGFloat(data_base.count)
+        BiasPoint[0].y=sum.y/CGFloat(data_base.count)
+        sum=CGPoint(x:0,y:0)
+        for i in 0..<data_chest.count
+        {
+            sum.x+=data_chest[i].x
+            sum.y+=data_chest[i].y
+        }
+        BiasPoint[1].x=sum.x/CGFloat(data_chest.count)
+        BiasPoint[1].y=sum.y/CGFloat(data_chest.count)
+        sum=CGPoint(x:0,y:0)
+        for i in 0..<data_chest_velocity.count
+        {
+            sum.x+=data_chest_velocity[i].x
+            sum.y+=data_chest_velocity[i].y
+        }
+        BiasPoint[2].x=sum.x/CGFloat(data_chest_velocity.count)
+        BiasPoint[2].y=sum.y/CGFloat(data_chest_velocity.count)
     }
+    
+    /*func getAverage(Sensor_ID: Int) -> CGPoint {
+        return CGPoint(x: runningTotal[Sensor_ID].x / CGFloat(totalSamples[Sensor_ID]), y: runningTotal[Sensor_ID].y / CGFloat(totalSamples[Sensor_ID]))
+    }*/
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -106,25 +130,22 @@ class MainViewController: UIViewController /*, CLLocationManagerDelegate */{
                             let newY = -(-CGFloat(euler.pitch) * MainViewController.EULER_SCALAR - self.tareOffsetY) / MainViewController.EULER_SCALAR
                             self.pointX.constant = newX * MainViewController.EULER_SCALAR
                             self.pointY.constant = -newY * MainViewController.EULER_SCALAR
-                            let rollString1 = String(format: "%.1f", newX)
-                            let pitchString1 = String(format: "%.1f", newY)
-                            self.runningTotal[Sensor_ID].x += newX
-                            self.runningTotal[Sensor_ID].y += newY
-                            self.data.append(CGPoint(x: newX, y: newY))
-                            let score = self.getScore(x: newX, y: newY,Sensor_ID:Sensor_ID)
-                            let average = self.getAverage(Sensor_ID:Sensor_ID)
-                            let averageXString = String(format: "%.1f", average.x)
-                            let averageYString = String(format: "%.1f", average.y)
-                            trainingString1 = self.timerRunning ? "\nAverage X1: \(averageXString)\nAverage Y1: \(averageYString)\nScore1: \(score)" : ""
                             self.totalSamples[Sensor_ID] += 1
+//                            let rollString1 = String(format: "%.1f", newX)
+//                            let pitchString1 = String(format: "%.1f", newY)
+                            data_base.append(CGPoint(x: newX, y: newY))
+                            base_time.append(CACurrentMediaTime()-initial_time)
+                            self.ScoreUpdate(x: newX, y: newY,Sensor_ID:Sensor_ID)
+//                            trainingString1 = self.timerRunning ? "\nAverage X1: \(averageXString)\nAverage Y1: \(averageYString)\nScore1: \(score)" : ""
                             
                             
-                            self.debugSensorDataView.text = "Sensor Data\nX1: \(rollString1)°  Y1: \(pitchString1)°\(trainingString1)\nX2: \(rollString2)°  Y2: \(pitchString2)°\(trainingString2)"
+//                            self.debugSensorDataView.text = "Sensor Data\nX1: \(rollString1)°  Y1: \(pitchString1)°\(trainingString1)\nX2: \(rollString2)°  Y2: \(pitchString2)°\(trainingString2)"
                         }
                         
                         //self.lastRoll = -(CGFloat(euler.yaw) * .pi / 160) + self.lastHeading - (.pi/8)
                         //self.setRollPointPosition(angle: self.lastRoll)
                         self.view.layoutIfNeeded()
+                        sem_packet.signal();
                         
         }
         nc.addObserver(forName:Notification.Name(rawValue:"Sensor_2"),
@@ -140,25 +161,57 @@ class MainViewController: UIViewController /*, CLLocationManagerDelegate */{
                             let newY = -(-CGFloat(euler.pitch) * MainViewController.EULER_SCALAR - self.tareOffsetY) / MainViewController.EULER_SCALAR
                             self.pointX.constant = newX * MainViewController.EULER_SCALAR
                             self.pointY.constant = -newY * MainViewController.EULER_SCALAR
-                            let rollString1 = String(format: "%.1f", newX)
-                            let pitchString1 = String(format: "%.1f", newY)
-                            self.runningTotal[Sensor_ID].x += newX
-                            self.runningTotal[Sensor_ID].y += newY
-                            self.data.append(CGPoint(x: newX, y: newY))
-                            let score = self.getScore(x: newX, y: newY,Sensor_ID:Sensor_ID)
-                            let average = self.getAverage(Sensor_ID:Sensor_ID)
-                            let averageXString = String(format: "%.1f", average.x)
-                            let averageYString = String(format: "%.1f", average.y)
-                            trainingString2 = self.timerRunning ? "\nAverage X2: \(averageXString)\nAverage Y2: \(averageYString)\nScore2: \(score)\n" : ""
+//                            let rollString1 = String(format: "%.1f", newX)
+//                            let pitchString1 = String(format: "%.1f", newY)
+//                            self.runningTotal[Sensor_ID].x += newX
+//                            self.runningTotal[Sensor_ID].y += newY
+                            data_chest.append(CGPoint(x: newX, y: newY))
+                            chest_time.append(CACurrentMediaTime()-initial_time)
                             self.totalSamples[Sensor_ID] += 1
+                            self.ScoreUpdate(x: newX, y: newY,Sensor_ID:Sensor_ID)
+//                            trainingString2 = self.timerRunning ? "\nAverage X2: \(averageXString)\nAverage Y2: \(averageYString)\nScore2: \(score)\n" : ""
 
-                            self.debugSensorDataView.text = "Sensor Data\nX1: \(rollString1)°  Y1: \(pitchString1)°\(trainingString1)\nX2: \(rollString2)°  Y2: \(pitchString2)°\(trainingString2)"
+//                            self.debugSensorDataView.text = "Sensor Data\nX1: \(rollString1)°  Y1: \(pitchString1)°\(trainingString1)\nX2: \(rollString2)°  Y2: \(pitchString2)°\(trainingString2)"
                         }
 
                         //self.lastRoll = -(CGFloat(euler.yaw) * .pi / 160) + self.lastHeading - (.pi/8)
                         //self.setRollPointPosition(angle: self.lastRoll)
                         self.view.layoutIfNeeded()
+                        sem_packet.signal();
 
+        }
+        nc.addObserver(forName:Notification.Name(rawValue:"Sensor_3"),
+                         object:nil, queue:nil) { notification in
+                            //guard let quaternion = notification.object as? Quaternion else { return }
+                            guard let euler = notification.object as? Euler else { return }
+                            
+                            
+                            if (self.timerRunning) {
+                                //print("velocity caught")
+                                self.lastEuler = euler
+                                let Sensor_ID:Int=2
+                                let newX = (-CGFloat(euler.roll) * MainViewController.EULER_SCALAR - self.tareOffsetX) / MainViewController.EULER_SCALAR
+                                let newY = -(-CGFloat(euler.pitch) * MainViewController.EULER_SCALAR - self.tareOffsetY) / MainViewController.EULER_SCALAR
+                                self.pointX.constant = newX * MainViewController.EULER_SCALAR
+                                self.pointY.constant = -newY * MainViewController.EULER_SCALAR
+//                                let rollString1 = String(format: "%.1f", newX)
+//                                let pitchString1 = String(format: "%.1f", newY)
+//                                self.runningTotal[Sensor_ID].x += newX
+//                                self.runningTotal[Sensor_ID].y += newY
+                                data_chest_velocity.append(CGPoint(x: newX, y: newY))
+                                chest_velocity_time.append(CACurrentMediaTime()-initial_time)
+                                self.totalSamples[Sensor_ID] += 1
+                                self.ScoreUpdate(x: newX, y: newY,Sensor_ID:Sensor_ID)
+//                                trainingString2 = self.timerRunning ? "\nAverage X2: \(averageXString)\nAverage Y2: \(averageYString)\nScore2: \(score)\n" : ""
+                                
+//                                self.debugSensorDataView.text = "Sensor Data\nX1: \(rollString1)°  Y1: \(pitchString1)°\(trainingString1)\nX2: \(rollString2)°  Y2: \(pitchString2)°\(trainingString2)"
+                            }
+                            
+                            //self.lastRoll = -(CGFloat(euler.yaw) * .pi / 160) + self.lastHeading - (.pi/8)
+                            //self.setRollPointPosition(angle: self.lastRoll)
+                            self.view.layoutIfNeeded()
+                            sem_packet.signal();
+                            
         }
         MainViewController.drawCircle(imageView: bullseyeView)
         MainViewController.drawPoint(imageView: pointView)
@@ -171,13 +224,11 @@ class MainViewController: UIViewController /*, CLLocationManagerDelegate */{
         countdownLabel.text = "\(countdownSeconds)"
         
         lastEuler = Euler(yaw: 0, pitch: 0, roll: 0)
-        data = []
+        data_base = []
+        data_chest = []
+        data_chest_velocity = []
         totalSamples[0] = 0
-        runningTotal[0] = CGPoint(x: 0, y: 0)
-        runningScore[0] = 0
         totalSamples[1] = 0
-        runningTotal[1] = CGPoint(x: 0, y: 0)
-        runningScore[1] = 0
         self.pointX.constant = 0
         self.pointY.constant = 0
         self.startTrainingButton.isEnabled = true
@@ -191,12 +242,18 @@ class MainViewController: UIViewController /*, CLLocationManagerDelegate */{
     }
     
     func trainingStart(){
+        data_base = []
+        data_chest = []
+        data_chest_velocity = []
+        base_time=[]
+        chest_time=[]
+        chest_velocity_time=[]
+        initial_time=0.0
+        BiasPoint=[CGPoint(x:0,y:0),CGPoint(x:0,y:0),CGPoint(x:0,y:0)]
+        penalty=[0.0,0.0,0.0]
         timerRunning = true
-        runningTotal[0].x = 0
-        runningTotal[0].y = 0
-        runningTotal[1].x = 0
-        runningTotal[1].y = 0
         timerSeconds = currentTraining?.duration ?? 0
+        training_started = true
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(MainViewController.updateTimerLabel), userInfo: nil, repeats: true)
     }
     
@@ -215,12 +272,15 @@ class MainViewController: UIViewController /*, CLLocationManagerDelegate */{
         if countdownSeconds == 0 {
             countdownTimer.invalidate()
             countdownLabel.layer.isHidden = true
+            initial_time=CACurrentMediaTime()
             trainingStart()
         }
     }
     
     func trainingEnded() {
         timerRunning = false
+        training_started = false
+        FindBiasPoint()
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         /* I THINK THIS LINE SHOULD BE DELETED *******************************
          if let sensorTile = appDelegate.bleController.sensorTile {
@@ -229,15 +289,8 @@ class MainViewController: UIViewController /*, CLLocationManagerDelegate */{
          */
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
         let viewController = storyBoard.instantiateViewController(withIdentifier: "reviewTrainingViewController") as! ReviewTrainingViewController
-        let dict = NSMutableArray()
-        for i in 0..<data.count {
-            dict.add([ "x": data[i].x, "y" : data[i].y ])
-        }
-        currentTraining?.data = dict as NSObject
-        currentTraining?.score = Float(getScore(x: 100, y: 100,Sensor_ID:0))
-        currentTraining?.score += Float(getScore(x: 100, y: 100,Sensor_ID:1))
-        currentTraining?.score /= 2
-        currentTraining?.biasPoint = getAverage(Sensor_ID:0) as NSObject
+        currentTraining?.score = Float(round(score))
+        //currentTraining?.biasPoint = getAverage(Sensor_ID:0) as NSObject
         //currentTraining?.biasPoint = getAverage(Sensor_ID:1) as NSObject
         // DO WE STILL WANT TO SAVE TRAININGS AT THIS STAGE???? *************************
         if let _ = currentTraining {

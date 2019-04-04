@@ -16,27 +16,39 @@ class ExportToCSV{
         var csvText: String!
         csvText = "Assesment Type,Base Type,Training Type,Leg Used,Training Duration,Training Date\n"
         csvText.append("\(AssessmentType.toString(assessmentType: AssessmentType(rawValue: Int(training.assessmentType))!)),\(BaseType.toString(baseType: BaseType(rawValue: Int(training.baseType))!)),\(TrainingType.toString(trainingType: TrainingType(rawValue: Int(training.trainingType))!)),\(LegType.toString(legType: LegType(rawValue: Int(training.legType))!)),\(training.duration) seconds,\(training.dateTime!)\n")
-        if let biasPoint = training.biasPoint as? CGPoint {
-            csvText.append("Bias X Angle,Bias Y Angle,Score\n")
-            csvText.append("\(biasPoint.x),\(biasPoint.y),\(training.score)\n")
-        }
-        
-        if let notes = training.notes {
-            csvText.append("Trainer Notes\n")
-            csvText.append("\(training.notes!)\n")
-        }
-        if let data = training.data as? NSArray {
-            csvText.append("X Angle,Y Angle\n")
-            for dataPoint in data{
-                
-                let newLine = "\(dataPoint)\n"
-                csvText.append(contentsOf: newLine)
+        //if let biasPoint = training.biasPoint as? CGPoint {
+            //csvText.append("Bias X Angle,Bias Y Angle,Score\n")
+            //csvText.append("\(biasPoint.x),\(biasPoint.y),\(training.score)\n")
+            csvText.append("\nBase Time,Base Roll,Base Pitch,Chest Time,Chest Roll,Chest Pitch,Chest Velocity Roll,Chest Velocity Pitch\n")
+            let max_count = max(data_chest_velocity.count,data_chest.count,data_base.count);
+            for i in 0..<max_count
+            {
+                if(i<data_base.count)
+                {
+                    csvText.append("\(base_time[i]),\(data_base[i].x),\(data_base[i].y),")
+                }
+                else
+                {
+                    csvText.append("-,-,-,")
+                }
+                if(i<data_chest.count)
+                {
+                    csvText.append("\(chest_time[i]),\(data_chest[i].x),\(data_chest[i].y),")
+                }
+                else
+                {
+                    csvText.append("-,-,-,")
+                }
+                if(i<data_chest_velocity.count)
+                {
+                    csvText.append("\(chest_velocity_time[i]),\(data_chest_velocity[i].x),\(data_chest_velocity[i].y),")
+                }
+                else
+                {
+                    csvText.append("-,-,-,")
+                }
+                csvText.append("\n")
             }
-        }
-        else {
-            csvText.append("No Training Data availible\n")
-        }
-        
         return csvText
         
     }
