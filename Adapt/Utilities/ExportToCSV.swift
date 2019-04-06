@@ -19,6 +19,8 @@ class ExportToCSV{
         //if let biasPoint = training.biasPoint as? CGPoint {
             //csvText.append("Bias X Angle,Bias Y Angle,Score\n")
             //csvText.append("\(biasPoint.x),\(biasPoint.y),\(training.score)\n")
+        csvText.append("\nScore,\(score)\n")
+        csvText.append("BP Base,\(BiasPoint[0].x),\(BiasPoint[0].y),BP Chest,\(BiasPoint[1].x),\(BiasPoint[1].y),BP Chest Velocity,\(BiasPoint[2].x),\(BiasPoint[2].y)\n")
             csvText.append("\nBase Time,Base Roll,Base Pitch,Chest Time,Chest Roll,Chest Pitch,Chest Velocity Roll,Chest Velocity Pitch\n")
             let max_count = max(data_chest_velocity.count,data_chest.count,data_base.count);
             for i in 0..<max_count

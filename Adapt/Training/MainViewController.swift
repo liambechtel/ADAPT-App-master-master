@@ -126,16 +126,14 @@ class MainViewController: UIViewController /*, CLLocationManagerDelegate */{
                         if (self.timerRunning) {
                             self.lastEuler = euler
                             let Sensor_ID:Int=0
-                            let newX = (-CGFloat(euler.roll) * MainViewController.EULER_SCALAR - self.tareOffsetX) / MainViewController.EULER_SCALAR
-                            let newY = -(-CGFloat(euler.pitch) * MainViewController.EULER_SCALAR - self.tareOffsetY) / MainViewController.EULER_SCALAR
-                            self.pointX.constant = newX * MainViewController.EULER_SCALAR
-                            self.pointY.constant = -newY * MainViewController.EULER_SCALAR
+                            let newX = euler.roll
+                            let newY = euler.pitch
                             self.totalSamples[Sensor_ID] += 1
 //                            let rollString1 = String(format: "%.1f", newX)
 //                            let pitchString1 = String(format: "%.1f", newY)
                             data_base.append(CGPoint(x: newX, y: newY))
                             base_time.append(CACurrentMediaTime()-initial_time)
-                            self.ScoreUpdate(x: newX, y: newY,Sensor_ID:Sensor_ID)
+                            self.ScoreUpdate(x: CGFloat(newX), y: CGFloat(newY),Sensor_ID:Sensor_ID)
 //                            trainingString1 = self.timerRunning ? "\nAverage X1: \(averageXString)\nAverage Y1: \(averageYString)\nScore1: \(score)" : ""
                             
                             
@@ -157,10 +155,8 @@ class MainViewController: UIViewController /*, CLLocationManagerDelegate */{
                         if (self.timerRunning) {
                             self.lastEuler = euler
                             let Sensor_ID:Int=1
-                            let newX = (-CGFloat(euler.roll) * MainViewController.EULER_SCALAR - self.tareOffsetX) / MainViewController.EULER_SCALAR
-                            let newY = -(-CGFloat(euler.pitch) * MainViewController.EULER_SCALAR - self.tareOffsetY) / MainViewController.EULER_SCALAR
-                            self.pointX.constant = newX * MainViewController.EULER_SCALAR
-                            self.pointY.constant = -newY * MainViewController.EULER_SCALAR
+                            let newX = euler.yaw
+                            let newY = euler.pitch
 //                            let rollString1 = String(format: "%.1f", newX)
 //                            let pitchString1 = String(format: "%.1f", newY)
 //                            self.runningTotal[Sensor_ID].x += newX
@@ -168,7 +164,7 @@ class MainViewController: UIViewController /*, CLLocationManagerDelegate */{
                             data_chest.append(CGPoint(x: newX, y: newY))
                             chest_time.append(CACurrentMediaTime()-initial_time)
                             self.totalSamples[Sensor_ID] += 1
-                            self.ScoreUpdate(x: newX, y: newY,Sensor_ID:Sensor_ID)
+                            self.ScoreUpdate(x: CGFloat(newX), y: CGFloat(newY),Sensor_ID:Sensor_ID)
 //                            trainingString2 = self.timerRunning ? "\nAverage X2: \(averageXString)\nAverage Y2: \(averageYString)\nScore2: \(score)\n" : ""
 
 //                            self.debugSensorDataView.text = "Sensor Data\nX1: \(rollString1)°  Y1: \(pitchString1)°\(trainingString1)\nX2: \(rollString2)°  Y2: \(pitchString2)°\(trainingString2)"
@@ -190,10 +186,8 @@ class MainViewController: UIViewController /*, CLLocationManagerDelegate */{
                                 //print("velocity caught")
                                 self.lastEuler = euler
                                 let Sensor_ID:Int=2
-                                let newX = (-CGFloat(euler.roll) * MainViewController.EULER_SCALAR - self.tareOffsetX) / MainViewController.EULER_SCALAR
-                                let newY = -(-CGFloat(euler.pitch) * MainViewController.EULER_SCALAR - self.tareOffsetY) / MainViewController.EULER_SCALAR
-                                self.pointX.constant = newX * MainViewController.EULER_SCALAR
-                                self.pointY.constant = -newY * MainViewController.EULER_SCALAR
+                                let newX = euler.yaw
+                                let newY = euler.pitch
 //                                let rollString1 = String(format: "%.1f", newX)
 //                                let pitchString1 = String(format: "%.1f", newY)
 //                                self.runningTotal[Sensor_ID].x += newX
@@ -201,7 +195,7 @@ class MainViewController: UIViewController /*, CLLocationManagerDelegate */{
                                 data_chest_velocity.append(CGPoint(x: newX, y: newY))
                                 chest_velocity_time.append(CACurrentMediaTime()-initial_time)
                                 self.totalSamples[Sensor_ID] += 1
-                                self.ScoreUpdate(x: newX, y: newY,Sensor_ID:Sensor_ID)
+                                self.ScoreUpdate(x: CGFloat(newX), y: CGFloat(newY),Sensor_ID:Sensor_ID)
 //                                trainingString2 = self.timerRunning ? "\nAverage X2: \(averageXString)\nAverage Y2: \(averageYString)\nScore2: \(score)\n" : ""
                                 
 //                                self.debugSensorDataView.text = "Sensor Data\nX1: \(rollString1)°  Y1: \(pitchString1)°\(trainingString1)\nX2: \(rollString2)°  Y2: \(pitchString2)°\(trainingString2)"
